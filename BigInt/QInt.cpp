@@ -75,7 +75,7 @@ void QInt::Nhap()
 			}
 
 		};
-		a[127] = 0;
+		a[127] = 0; //Bit dấu
 	}
 
 	else //Số nhập vào là số âm
@@ -106,8 +106,34 @@ void QInt::Nhap()
 			}
 
 		};
-		a[127] = 1;
+		a[127] = 1; //Bit dấu
 
+		// Đảo bit thành dạng bù 1
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 1)
+			{
+				a[i] = 0;
+			}
+			else
+			{
+				a[i] = 1;
+			}
+		}
+
+		//Cộng 1 vào kết quả thành dạng bù 2
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 1)
+			{
+				a[i] = 0;
+			}
+			else
+			{
+				a[i] = 1;
+				break;
+			}
+		}
 	}
 
 	// Bật các bit của data bằng cách OR với giá trị của mảng a tương ứng
