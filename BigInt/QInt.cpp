@@ -156,7 +156,56 @@ void QInt::Xuat()
 		
 	}
 }
+string multiple2(string s)
+{
+	int temp = 0, carry = 0;;
+	int _length = s.length();
+	int a_size = _length + 1;
+	int *a = new int[a_size];
+	string result;
+	for (int i = 0; i < a_size; i++)
+		a[i] = 0;
+	for (int i = _length - 1; i >= 0; i--)
+	{
+		temp = (s[i] - '0') * 2;
+		if (carry == 1)
+			temp++;
+		if (temp > 9)
+			carry = 1;
+		else
+			carry = 0;
+		a[i + 1] += temp % 10;
 
+	}
+	if (carry == 1)
+	{
+		a[0] = 1;
+	}
+	else
+	{
+		for (int i = 0; i < a_size - 1; i++)
+			a[i] = a[i + 1];
+		a_size--;
+	}
+	for (int i = 0; i < a_size; i++)
+	{
+		result += (a[i] + '0');
+	}
+	return result;
+}
+string myPow(int n)//n là s? mu
+{
+	string temp="2";
+	if (n == 0)
+		return "1";
+	if (n == 1)
+		return "2";
+	for (int i = 0; i < n-1; i++)
+	{
+		temp = multiple2(temp);
+	}
+	return temp;
+}
 QInt::~QInt()
 {
 }

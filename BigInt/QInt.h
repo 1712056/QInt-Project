@@ -17,4 +17,6 @@ public:
 };
 
 string chia2(string s);
+string multiple2(string s);
+string myPow(int n);
 
