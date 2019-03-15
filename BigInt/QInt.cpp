@@ -88,7 +88,7 @@ void QInt::Nhap()
 	}
 	
 }
-string PlusBigInt(string a, string b)
+string plusNumInStr(string a, string b)
 {
 	if (a.length() < b.length())
 	{
@@ -150,12 +150,38 @@ string PlusBigInt(string a, string b)
 
 void QInt::Xuat()
 {
-	for (int i = 0; i < 4; i++)
+	unsigned int a[128] = { 0 };
+	int d = 3, count = 0;
+	for (int i = 0; i < 128; i++)
 	{
-		cout << data[i];
-		
+		a[i] = 1 & (data[d] >> count);
+		count++;
+		if (count == 32)
+		{
+			count = 0;
+			d--;
+		}
 	}
+	
+	
+	string result="0";
+	if (a[127] == 0) //Bit dấu = 0
+	{
+		for (int i = 0; i < 127; i++)
+		{
+			string temp;
+			if (a[i] == 1)
+			{
+				temp = myPow(i);
+				result = plusNumInStr(result, temp);
+			}
+
+		}
+	}
+
+	cout << result;
 }
+
 string multiple2(string s)
 {
 	int temp = 0, carry = 0;;
@@ -193,7 +219,7 @@ string multiple2(string s)
 	}
 	return result;
 }
-string myPow(int n)//n l� s? mu
+string myPow(int n)//n là số mũ
 {
 	string temp="2";
 	if (n == 0)
