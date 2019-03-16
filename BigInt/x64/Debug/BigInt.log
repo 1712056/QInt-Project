@@ -1,2 +1,7 @@
 ﻿  BigInt.cpp
+  QInt.cpp
+c:\users\asus\qint-project\bigint\qint.cpp(95): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(96): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(185): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
   BigInt.vcxproj -> C:\Users\ASUS\QInt-Project\x64\Debug\BigInt.exe

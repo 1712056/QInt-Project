@@ -90,61 +90,60 @@ void QInt::Nhap()
 }
 string plusNumInStr(string a, string b)
 {
-	if (a.length() < b.length())
-	{
-		string s = a;
-		a = b;
-		b = s;
-	}
 	string result;
-	for (int i = 0; i < a.length() + 1; i++)
-	{
-		result += "0";
-	}
-	bool remember = false;
-	for (int i = 0; i < b.length(); i++)
-	{
-		int temp = b[b.length() - i - 1] - '0' + a[a.length() - i - 1] - '0';
 
-		if (remember)
-			temp++;
-
+	int i = a.length() - 1;
+	int j = b.length() - 1;
+	int nho = 0;
+	while (i >= 0 && j >= 0)
+	{
+		int temp = (a[i] - 48) + (b[j] - 48);
+		char c = (temp % 10) + nho + 48;
 		if (temp > 9)
-			remember = true;
+		{
+			nho = 1;
+		}
 		else
-			remember = false;
-
-		temp = temp % 10;
-
-		result[a.length() - i] = temp + '0';
+			nho = 0;
+		result += c;
+		i--;
+		j--;
 	}
-	for (int i = 0; i < a.length() - b.length(); i++)
-	{
-		int temp = a[a.length() - b.length() - i - 1] - '0';
 
-		if (remember)
-			temp++;
+	while (i >= 0)
+	{
+		int temp = (a[i] - 48) + nho;
+		char c = (temp % 10) + 48;
 		if (temp > 9)
-			remember = true;
+		{
+			nho = 1;
+		}
 		else
-			remember = false;
-
-		temp = temp % 10;
-
-		result[a.length() - b.length() - i] = temp + '0';
+			nho = 0;
+		result += c;
+		i--;
 	}
 
-	result[a.length() + 1] = '\0';
-
-	if (remember)
+	while (j >= 0)
 	{
-		result[0] = '1';
+		int temp = (b[j] - 48) + nho;
+		char c = (temp % 10) + 48;
+		if (temp > 9)
+		{
+			nho = 1;
+		}
+		else
+			nho = 0;
+		result += c;
+		j--;
 	}
-	else
+
+	if (nho == 1)
 	{
-		for (int i = 0; i <= a.length(); i++)
-			result[i] = result[i + 1];
+		result += "1";
 	}
+
+	reverse(result.begin(), result.end());
 	return result;
 }
 
@@ -165,20 +164,18 @@ void QInt::Xuat()
 	
 	
 	string result="0";
+	string temp;
 	if (a[127] == 0) //Bit dấu = 0
 	{
 		for (int i = 0; i < 127; i++)
 		{
-			string temp;
 			if (a[i] == 1)
 			{
 				temp = myPow(i);
 				result = plusNumInStr(result, temp);
 			}
-
 		}
 	}
-
 	cout << result;
 }
 
@@ -219,7 +216,7 @@ string multiple2(string s)
 	}
 	return result;
 }
-string myPow(int n)//n là số mũ
+string myPow(int n) //n là số mũ
 {
 	string temp="2";
 	if (n == 0)
