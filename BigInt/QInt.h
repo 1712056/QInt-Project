@@ -22,6 +22,18 @@ public:
 	QInt operator >> (int n);
 	void rol();
 	void ror();
+	string decToBin();
+	string binToDec(string s);
+	string binToHex(string s);
+	string decToHex();
+	QInt operator+(QInt B);
+	QInt operator-(QInt B);
+	bool operator>(QInt B);
+	bool operator<(QInt B);
+	bool operator<=(QInt B);
+	bool operator==(QInt B);
+	bool operator>=(QInt B);
+	QInt& operator=(QInt B);
 };
 
 string chia2(string s);

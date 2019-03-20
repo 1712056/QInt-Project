@@ -11,6 +11,10 @@ using namespace std;
 int main()
 {
 	QInt a;
+	QInt b;
 	a.Nhap();
-	a.Xuat();
+	b.Nhap();
+	QInt c;
+	c = a - b;
+	c.Xuat();
 }
