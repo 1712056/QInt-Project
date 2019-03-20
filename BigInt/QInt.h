@@ -14,6 +14,14 @@ public:
 	~QInt();
 	void Nhap();
 	void Xuat();
+	QInt operator~();
+	QInt operator&(QInt b);
+	QInt operator^(QInt b);
+	QInt operator|(QInt b);
+	QInt operator<<(int n);
+	QInt operator >> (int n);
+	void rol();
+	void ror();
 };
 
 string chia2(string s);

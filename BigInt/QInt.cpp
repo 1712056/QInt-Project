@@ -96,7 +96,7 @@ QInt::QInt()
 
 void QInt::Nhap()
 {
-	//Nhập một số lớn dạn chuỗi
+	//Nhập một số lớn dạng chuỗi
 	string s;
 	unsigned int a[128] = { 0 };
 	cout << "Nhap so: ";
@@ -188,7 +188,7 @@ void QInt::Nhap()
 		}
 	}
 
-	// Bật các bit của data bằng cách OR với giá trị của mảng a tương ứng
+	// Bật các bit của data bằng cách OR với giá trị của mảng a tương ứng, bit dấu a[127]
 	int count = 0;
 	int d = 0;
 	for (int i = 127; i >= 0; i--)
@@ -213,8 +213,8 @@ string plusNumInStr(string a, string b)
 	int nho = 0;
 	while (i >= 0 && j >= 0) //Vòng lặp cộng các chữ số ở cuối của a, b 
 	{
-		int temp = (a[i] - 48) + (b[j] - 48);
-		char c = (temp % 10) + nho + 48;
+		int temp = (a[i] - 48) + (b[j] - 48) +nho;
+		char c = (temp % 10) + 48;
 		if (temp > 9)
 		{
 			nho = 1;
@@ -333,6 +333,128 @@ void QInt::Xuat()
 		reverse(result.begin(), result.end()); //Đảo chuỗi cho đúng kết quả
 	}
 	cout << result;
+}
+
+QInt QInt::operator~()
+{
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 32; j++)
+		{
+			data[i] = data[i] ^ ( 1 << (32 - 1 - j) );
+		}
+	}
+	return *this;
+}
+
+QInt QInt::operator|(QInt b)
+{
+	QInt result;
+	for (int i = 3; i >=0; i--)
+	{
+		result.data[i] = data[i] | b.data[i];
+	}
+	return result;
+}
+
+QInt QInt::operator&(QInt b)
+{
+	QInt result;
+	for (int i = 3; i >= 0; i--)
+	{
+		result.data[i] = data[i] & b.data[i];
+	}
+	return result;
+}
+
+QInt QInt::operator^(QInt b)
+{
+	QInt result;
+	for (int i = 3; i >= 0; i--)
+	{
+		result.data[i] = data[i] ^ b.data[i];
+	}
+	return result;
+}
+
+QInt QInt::operator<<(int n)
+{
+	if (n < 0)
+	{
+		cout << "Loi";
+		exit(0);
+	}
+	else if (n == 0)
+	{
+		return *this;
+	}
+	else
+	{
+		for (int i = 0; i < 4; i++)
+		{
+			if (i == 3)
+			{
+				data[i] = data[i] << n;
+			}
+			else
+			{
+				data[i] = (data[i] << n) | (data[i + 1] >> (32 - n));
+			}
+		}
+	}
+	return *this;
+}
+
+QInt QInt::operator>>(int n)
+{
+	if (n < 0)
+	{
+		cout << "Loi";
+		exit(0);
+	}
+	else
+	{
+		for (int i = 3; i >= 0; i--)
+		{
+			if (i == 0)
+			{
+				data[i] = data[i] >> n;
+			}
+			else
+			{
+				data[i] = (data[i] >> n) | (data[i - 1] << (32 - n));
+			}
+		}
+	}
+	return *this;
+}
+
+void QInt::rol()
+{
+	bool flag = true;
+	if (((data[0] >> 128) & 1) != 1)
+	{
+		flag = 0;
+	}
+	*this << 1;
+	if (flag == true)
+	{
+		data[3] = data[3] | 1;
+	}
+}
+
+void QInt::ror()
+{
+	bool flag = 1;
+	if ((data[3] & 1) == 0)
+	{
+		flag = 0;
+	}
+	*this >> 1;
+	if (flag == 1)
+	{
+		data[0] == data[0] | (1 << 31);
+	}
 }
 
 
