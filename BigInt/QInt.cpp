@@ -2272,7 +2272,7 @@ QInt& QInt::operator=(QInt B)
 
 QInt& QInt::operator=(string s)
 {
-	unsigned int a[128];
+	unsigned int a[128] = { 0 };
 	//Tiến hành đổi s sang dạng nhị phân lưu vào mảng a
 	int i = 0;
 	if (s[0] != '-' || s[0] == '+') //Số nhập vào là số dương
@@ -2331,7 +2331,7 @@ QInt& QInt::operator=(string s)
 		};
 		a[127] = 1; //Bit dấu
 
-					// Đảo bit thành dạng bù 1
+		// Đảo bit thành dạng bù 1
 		for (int i = 0; i < 127; i++)
 		{
 			if (a[i] == 1)
@@ -2372,6 +2372,7 @@ QInt& QInt::operator=(string s)
 			d++;
 		}
 	}
+	return *this;
 }
 
 string QInt::decToStr()
@@ -2443,6 +2444,73 @@ string QInt::decToStr()
 	return result;
 
 }
+
+QInt QInt::hexToDec(string s)
+{
+	string bin;//chu?i luu gi? giá tr? ki?u bin du?c d?i t? hex sang
+	for (int i = 0; i < s.length(); i++)
+	{
+		string temp;
+		switch (s[i])
+		{
+		case '0':
+			temp = "0000";
+			break;
+		case '1':
+			temp = "0001";
+			break;
+		case '2':
+			temp = "0010";
+			break;
+		case '3':
+			temp = "0011";
+			break;
+		case '4':
+			temp = "0100";
+			break;
+		case '5':
+			temp = "0101";
+			break;
+		case '6':
+			temp = "0110";
+			break;
+		case '7':
+			temp = "0111";
+			break;
+		case '8':
+			temp = "1000";
+			break;
+		case '9':
+			temp = "1001";
+			break;
+		case	'A':
+			temp = "1010";
+			break;
+		case 'B':
+			temp = "1011";
+			break;
+		case 'C':
+			temp = "1100";
+			break;
+		case 'D':
+			temp = "1101";
+			break;
+		case 'E':
+			temp = "1110";
+			break;
+		case 'F':
+			temp = "1111";
+			break;
+		default:
+			cout << "ERROR";
+			break;
+		}
+		bin += temp;
+		temp.clear();
+	}
+	return binToDec(bin);
+}
+
 
 QInt::~QInt()
 {

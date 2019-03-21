@@ -36,6 +36,7 @@ public:
 	bool operator>=(QInt B);
 	QInt& operator=(QInt B);
 	QInt &operator=(string s);
+	QInt hexToDec(string s);
 };
 
 string chia2(string s);
