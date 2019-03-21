@@ -96,9 +96,8 @@ QInt::QInt()
 
 void QInt::Nhap()
 {
-	//Nhập một số lớn dạng chuỗi
-	string s;
 	unsigned int a[128] = { 0 };
+	string s;
 	cout << "Nhap so: ";
 	cin >> s;
 
@@ -479,67 +478,21 @@ string QInt::decToBin()
 	}
 	return result;
 }
-string QInt::binToDec(string s)
+QInt QInt::binToDec(string s)
 {
-	int *a = new int[s.length()];
-	for (int i = 0; i < s.length(); i++)
-		a[i] = 0;
-	int size = 0;
+	int count = 0;//d? qu?n lý s? bit c?a 1 ph?n t? ki?u QInt=32 bit
+	int resultSize = 3;
 	for (int i = s.length() - 1; i >= 0; i--)
 	{
-		a[size] = (s[i] - '0');
-		size++;
-	}
-	string result = "0";
-	string temp;
-	if (a[127] == 0) //Bit d?u = 0
-	{
-		for (int i = 0; i < 127; i++)
+		data[resultSize] = data[resultSize] | ((s[i] - '0') << count);// b?t bit cho result
+		count++;
+		if (count == 32)
 		{
-			if (a[i] == 1)
-			{
-				temp = myPow(i);
-				result = plusNumInStr(result, temp);
-			}
+			count = 0;
+			resultSize--;
 		}
 	}
-	else //Bit d?u = 1
-	{
-		// Tr? 1 d? thành d?ng bù 1
-		for (int i = 0; i < 127; i++)
-		{
-			if (a[i] == 0)
-			{
-				a[i] = 1;
-			}
-			else
-			{
-				a[i] = 0;
-				break;
-			}
-		}
-		// Ð?o bit
-		for (int i = 0; i < 127; i++)
-		{
-			if (a[i] == 1)
-				a[i] = 0;
-			else
-				a[i] = 1;
-		}
-		for (int i = 0; i < 127; i++)
-		{
-			if (a[i] == 1)
-			{
-				temp = myPow(i);
-				result = plusNumInStr(result, temp);
-			}
-		}
-		reverse(result.begin(), result.end()); //Ð?o chu?i
-		result += "-"; //Thêm d?u âm vào cu?i chu?i
-		reverse(result.begin(), result.end()); //Ð?o chu?i cho dúng k?t qu?
-	}
-	delete[]a;
-	return result;
+	return *this;
 }
 string QInt::binToHex(string s)
 {
@@ -2317,7 +2270,179 @@ QInt& QInt::operator=(QInt B)
 	return *this;
 }
 
+QInt& QInt::operator=(string s)
+{
+	unsigned int a[128];
+	//Tiến hành đổi s sang dạng nhị phân lưu vào mảng a
+	int i = 0;
+	if (s[0] != '-' || s[0] == '+') //Số nhập vào là số dương
+	{
+		while (s != "0")
+		{
+			//Xét số cuối cùng của chuỗi, nếu là số chẵn khi chia 2 sẽ dư 0 
+			if ((s[s.length() - 1] - 48) % 2 == 0)
+			{
+				a[i++] = 0;
+			}
+			//Nếu là số lẻ, chia 2 sẽ dư 1
+			else
+			{
+				a[i++] = 1;
+			}
 
+			//Chia chuỗi s cho 2
+			s = chia2(s);
+			if (i > 126)
+			{
+				throw "Stack Overflow";
+			}
+
+		};
+		a[127] = 0; //Bit dấu
+	}
+
+	else //Số nhập vào là số âm
+	{
+		string positive_s;
+		for (int i = 1; i < s.length(); i++) //Lấy phần sau dấu âm của số
+		{
+			positive_s += s[i];
+		}
+		while (positive_s != "0")
+		{
+			//Xét số cuối cùng của chuỗi, nếu là số chẵn khi chia 2 sẽ dư 0 
+			if ((positive_s[positive_s.length() - 1] - 48) % 2 == 0)
+			{
+				a[i++] = 0;
+			}
+			//Nếu là số lẻ, chia 2 sẽ dư 1
+			else
+			{
+				a[i++] = 1;
+			}
+
+			//Chia chuỗi s cho 2
+			positive_s = chia2(positive_s);
+			if (i > 126)
+			{
+				throw "Stack Overflow";
+			}
+
+		};
+		a[127] = 1; //Bit dấu
+
+					// Đảo bit thành dạng bù 1
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 1)
+			{
+				a[i] = 0;
+			}
+			else
+			{
+				a[i] = 1;
+			}
+		}
+
+		//Cộng 1 vào kết quả thành dạng bù 2
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 1)
+			{
+				a[i] = 0;
+			}
+			else
+			{
+				a[i] = 1;
+				break;
+			}
+		}
+	}
+
+	// Bật các bit của data bằng cách OR với giá trị của mảng a tương ứng, bit dấu a[127]
+	int count = 0;
+	int d = 0;
+	for (int i = 127; i >= 0; i--)
+	{
+		data[d] = data[d] | (a[i] << (32 - 1 - count));
+		count++;
+		if (count == 32)
+		{
+			count = 0;
+			d++;
+		}
+	}
+}
+
+string QInt::decToStr()
+{
+	unsigned int a[128] = { 0 };
+	// Đọc các bit của data lưu vào mảng a, bit dấu là bit a[127]
+	int d = 3, count = 0;
+	for (int i = 0; i < 128; i++)
+	{
+		a[i] = 1 & (data[d] >> count);
+		count++;
+		if (count == 32)
+		{
+			count = 0;
+			d--;
+		}
+	}
+
+
+	string result = "0";
+	string temp;
+	if (a[127] == 0) //Bit dấu = 0
+	{
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 1)
+			{
+				temp = myPow(i);
+				result = plusNumInStr(result, temp);
+			}
+		}
+	}
+	else //Bit dấu = 1
+	{
+		// Trừ 1 để thành dạng bù 1
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 0)
+			{
+				a[i] = 1;
+			}
+			else
+			{
+				a[i] = 0;
+				break;
+			}
+		}
+		// Đảo bit
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 1)
+				a[i] = 0;
+			else
+				a[i] = 1;
+		}
+
+		for (int i = 0; i < 127; i++)
+		{
+			if (a[i] == 1)
+			{
+				temp = myPow(i);
+				result = plusNumInStr(result, temp);
+			}
+		}
+		reverse(result.begin(), result.end()); //Đảo chuỗi
+		result += "-"; //Thêm dấu âm vào cuối chuỗi
+		reverse(result.begin(), result.end()); //Đảo chuỗi cho đúng kết quả
+	}
+	return result;
+
+}
 
 QInt::~QInt()
 {
