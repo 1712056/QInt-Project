@@ -1,6 +1,16 @@
 ﻿#include "stdafx.h"
 #include "QInt.h"
 
+int strToNum(string s)
+{
+	int n = 0;
+	int len = s.size();
+	for (int i = 0; i < len; i++)
+	{
+		n += (s[i] - 48)*pow(10.0, len - i-1);
+	}
+	return n;
+}
 
 string chia2(string s)
 {
@@ -110,12 +120,14 @@ void QInt::Nhap()
 			//Xét số cuối cùng của chuỗi, nếu là số chẵn khi chia 2 sẽ dư 0 
 			if ((s[s.length() - 1] - 48) % 2 == 0)
 			{
-				a[i++] = 0;
+				a[i] = 0;
+				i++;
 			}
 			//Nếu là số lẻ, chia 2 sẽ dư 1
 			else
 			{
-				a[i++] = 1;
+				a[i] = 1;
+				i++;
 			}
 
 			//Chia chuỗi s cho 2
@@ -136,17 +148,20 @@ void QInt::Nhap()
 		{
 			positive_s += s[i];
 		}
+		i = 0;
 		while (positive_s != "0")
 		{
 			//Xét số cuối cùng của chuỗi, nếu là số chẵn khi chia 2 sẽ dư 0 
 			if ((positive_s[positive_s.length() - 1] - 48) % 2 == 0)
 			{
-				a[i++] = 0;
+				a[i] = 0;
+				i++;
 			}
 			//Nếu là số lẻ, chia 2 sẽ dư 1
 			else
 			{
-				a[i++] = 1;
+				a[i] = 1;
+				i++;
 			}
 
 			//Chia chuỗi s cho 2
@@ -158,8 +173,8 @@ void QInt::Nhap()
 
 		};
 		a[127] = 1; //Bit dấu
-
-					// Đảo bit thành dạng bù 1
+		int dem = i;
+		// Đảo bit thành dạng bù 1
 		for (int i = 0; i < 127; i++)
 		{
 			if (a[i] == 1)
@@ -184,6 +199,10 @@ void QInt::Nhap()
 				a[i] = 1;
 				break;
 			}
+		}
+		if (dem == 126)
+		{
+			a[0] = 0;
 		}
 	}
 
@@ -2282,17 +2301,19 @@ QInt& QInt::operator=(string s)
 			//Xét số cuối cùng của chuỗi, nếu là số chẵn khi chia 2 sẽ dư 0 
 			if ((s[s.length() - 1] - 48) % 2 == 0)
 			{
-				a[i++] = 0;
+				a[i] = 0;
+				i++;
 			}
 			//Nếu là số lẻ, chia 2 sẽ dư 1
 			else
 			{
-				a[i++] = 1;
+				a[i] = 1;
+				i++;
 			}
 
 			//Chia chuỗi s cho 2
 			s = chia2(s);
-			if (i > 126)
+			if (i > 127)
 			{
 				throw "Stack Overflow";
 			}
@@ -2308,29 +2329,30 @@ QInt& QInt::operator=(string s)
 		{
 			positive_s += s[i];
 		}
+		i = 0;
 		while (positive_s != "0")
 		{
 			//Xét số cuối cùng của chuỗi, nếu là số chẵn khi chia 2 sẽ dư 0 
 			if ((positive_s[positive_s.length() - 1] - 48) % 2 == 0)
 			{
-				a[i++] = 0;
+				a[i] = 0;
+				i++;
 			}
 			//Nếu là số lẻ, chia 2 sẽ dư 1
 			else
 			{
-				a[i++] = 1;
+				a[i] = 1;
+				i++;
 			}
-
-			//Chia chuỗi s cho 2
-			positive_s = chia2(positive_s);
-			if (i > 126)
+			if (i > 128) // ????:D????
 			{
 				throw "Stack Overflow";
 			}
-
+			//Chia chuỗi s cho 2
+			positive_s = chia2(positive_s);
 		};
 		a[127] = 1; //Bit dấu
-
+		int dem = i;
 		// Đảo bit thành dạng bù 1
 		for (int i = 0; i < 127; i++)
 		{
@@ -2356,6 +2378,10 @@ QInt& QInt::operator=(string s)
 				a[i] = 1;
 				break;
 			}
+		}
+		if (dem == 126)
+		{
+			a[0] = 0;
 		}
 	}
 
@@ -2483,22 +2509,22 @@ QInt QInt::hexToDec(string s)
 		case '9':
 			temp = "1001";
 			break;
-		case	'A':
+		case	'A': case'a':
 			temp = "1010";
 			break;
-		case 'B':
+		case 'B': case'b':
 			temp = "1011";
 			break;
-		case 'C':
+		case 'C': case'c':
 			temp = "1100";
 			break;
-		case 'D':
+		case 'D': case'd':
 			temp = "1101";
 			break;
-		case 'E':
+		case 'E':case 'e':
 			temp = "1110";
 			break;
-		case 'F':
+		case 'F':case 'f':
 			temp = "1111";
 			break;
 		default:
@@ -2509,6 +2535,580 @@ QInt QInt::hexToDec(string s)
 		temp.clear();
 	}
 	return binToDec(bin);
+}
+
+//toan tu chia
+QInt QInt::operator/(QInt B)
+{
+	QInt H;
+	unsigned int a1[128] = { 0 };
+	// Ð?c các bit c?a data luu vào m?ng a1, bit d?u là bit a1[127]
+	int d1 = 3, count1 = 0;
+	for (int i = 0; i < 128; i++)
+	{
+		a1[i] = 1 & (data[d1] >> count1);
+		count1++;
+		if (count1 == 32)
+		{
+			count1 = 0;
+			d1--;
+		}
+	}
+	unsigned int a2[128] = { 0 };
+	// Ð?c các bit c?a data luu vào m?ng a2, bit d?u là bit a2[127]
+	int d2 = 3, count2 = 0;
+	for (int i = 0; i < 128; i++)
+	{
+		a2[i] = 1 & (B.data[d2] >> count2);
+		count2++;
+		if (count2 == 32)
+		{
+			count2 = 0;
+			d2--;
+		}
+	}
+	QInt C, D;
+	if (a1[127] == a2[127])
+	{
+		if (a2[127] != 0)
+		{
+			//chuy?n s? th? 1 v? s? duong
+			// Tr? 1 d? thành d?ng bù 1
+			for (int i = 0; i < 127; i++)
+			{
+				if (a1[i] == 0)
+				{
+					a1[i] = 1;
+				}
+				else
+				{
+					a1[i] = 0;
+					break;
+				}
+			}
+			// Ð?o bit
+			for (int i = 0; i < 127; i++)
+			{
+				if (a1[i] == 1)
+					a1[i] = 0;
+				else
+					a1[i] = 1;
+			}
+			a1[127] = 0;
+			//chuy?n s? th? 2 v? s? duong
+			// Tr? 1 d? thành d?ng bù 1
+			for (int i = 0; i < 127; i++)
+			{
+				if (a2[i] == 0)
+				{
+					a2[i] = 1;
+				}
+				else
+				{
+					a2[i] = 0;
+					break;
+				}
+			}
+			// Ð?o bit
+			for (int i = 0; i < 127; i++)
+			{
+				if (a2[i] == 1)
+					a2[i] = 0;
+				else
+					a2[i] = 1;
+			}
+			a2[127] = 0;
+			d1 = 0;
+			d2 = 0;
+			count1 = 0;
+			count2 = 0;
+			QInt E, F;
+			for (int i = 127; i >= 0; i--)
+			{
+				E.data[d1] = E.data[d1] | (a1[i] << (32 - 1 - count1));
+				count1++;
+				if (count1 == 32)
+				{
+					count1 = 0;
+					d1++;
+				}
+			}
+			for (int i = 127; i >= 0; i--)
+			{
+				F.data[d2] = F.data[d2] | (a2[i] << (32 - 1 - count2));
+				count2++;
+				if (count2 == 32)
+				{
+					count2 = 0;
+					d2++;
+				}
+			}
+			*this = E;
+			B = F;
+
+		}
+		for (int i = 0; i < 128; i++)
+		{
+			C = C << 1;
+			int temp = a1[127];
+			*this = *this << 1;
+			d1 = 3;
+			count1 = 0;
+			for (int i = 0; i < 128; i++)
+			{
+				a1[i] = 1 & (data[d1] >> count1);
+				count1++;
+				if (count1 == 32)
+				{
+					count1 = 0;
+					d1--;
+				}
+			}
+			unsigned int a3[128] = { 0 };
+			int d3 = 3, count3 = 0;
+			for (int i = 0; i < 128; i++)
+			{
+				a3[i] = 1 & (C.data[d3] >> count3);
+				count3++;
+				if (count3 == 32)
+				{
+					count3 = 0;
+					d3--;
+				}
+			}
+			a3[0] = temp;
+			//c?p nh?t l?i thành ph?n trong l?p C
+			int count = 0;
+			int d = 0;
+			for (int i = 127; i >= 0; i--)
+			{
+				C.data[d] = C.data[d] | (a3[i] << (32 - 1 - count));
+				count++;
+				if (count == 32)
+				{
+					count = 0;
+					d++;
+				}
+			}
+			D = C - B;
+			unsigned int a4[128] = { 0 };
+			//Ð?c các bit c?a data luu vào m?ng a4, bit d?u là bit a4[127]
+			int d4 = 3, count4 = 0;
+			for (int i = 0; i < 128; i++)
+			{
+				a4[i] = 1 & (D.data[d4] >> count4);
+				count4++;
+				if (count4 == 32)
+				{
+					count4 = 0;
+					d4--;
+				}
+			}
+			if (a4[127] == 0)
+			{
+				a1[0] = 1;
+				count = 0;
+				d = 0;
+				for (int i = 127; i >= 0; i--)
+				{
+					data[d] = data[d] | (a1[i] << (32 - 1 - count));
+					count++;
+					if (count == 32)
+					{
+						count = 0;
+						d++;
+					}
+				}
+				C = D;
+			}
+			else
+			{
+				a1[0] = 0;
+				count = 0;
+				d = 0;
+				for (int i = 127; i >= 0; i--)
+				{
+					data[d] = data[d] | (a1[i] << (32 - 1 - count));
+					count++;
+					if (count == 32)
+					{
+						count = 0;
+						d++;
+					}
+				}
+			}
+			count = 0;
+			d = 0;
+			for (int i = 127; i >= 0; i--)
+			{
+				data[d] = data[d] | (a1[i] << (32 - 1 - count));
+				count++;
+				if (count == 32)
+				{
+					count = 0;
+					d++;
+				}
+			}
+		}
+		d1 = 0;
+		count1 = 0;
+		for (int i = 127; i >= 0; i--)
+		{
+			H.data[d1] = H.data[d1] | (a1[i] << (32 - 1 - count1));
+			count1++;
+			if (count1 == 32)
+			{
+				count1 = 0;
+				d1++;
+			}
+		}
+	}
+	else
+	{
+		if (a1[127] != 0)
+		{
+			//chuy?n s? th? 1 v? s? duong
+			// Tr? 1 d? thành d?ng bù 1
+			for (int i = 0; i < 127; i++)
+			{
+				if (a1[i] == 0)
+				{
+					a1[i] = 1;
+				}
+				else
+				{
+					a1[i] = 0;
+					break;
+				}
+			}
+			// Ð?o bit
+			for (int i = 0; i < 127; i++)
+			{
+				if (a1[i] == 1)
+					a1[i] = 0;
+				else
+					a1[i] = 1;
+			}
+			a1[127] = 0;
+			//chuy?n s? th? 2 thành s? âm
+			// Ð?o bit thành d?ng bù 1
+			for (int i = 0; i < 127; i++)
+			{
+				if (a2[i] == 1)
+				{
+					a2[i] = 0;
+				}
+				else
+				{
+					a2[i] = 1;
+				}
+			}
+
+			//C?ng 1 vào k?t qu? thành d?ng bù 2
+			for (int i = 0; i < 127; i++)
+			{
+				if (a2[i] == 1)
+				{
+					a2[i] = 0;
+				}
+				else
+				{
+					a2[i] = 1;
+					break;
+				}
+			}
+			a2[127] = 1;
+			QInt E, F;
+			d1 = d2 = count1 = count2 = 0;
+			for (int i = 127; i >= 0; i--)
+			{
+				E.data[d1] = E.data[d1] | (a1[i] << (32 - 1 - count1));
+				count1++;
+				if (count1 == 32)
+				{
+					count1 = 0;
+					d1++;
+				}
+			}
+			for (int i = 127; i >= 0; i--)
+			{
+				F.data[d2] = F.data[d2] | (a2[i] << (32 - 1 - count2));
+				count2++;
+				if (count2 == 32)
+				{
+					count2 = 0;
+					d2++;
+				}
+			}
+			*this = E;
+			B = F;
+		}
+		for (int i = 0; i < 128; i++)
+		{
+			C = C << 1;
+			int temp = a1[127];
+			*this = *this << 1;
+			d1 = 3;
+			count1 = 0;
+			for (int i = 0; i < 128; i++)
+			{
+				a1[i] = 1 & (data[d1] >> count1);
+				count1++;
+				if (count1 == 32)
+				{
+					count1 = 0;
+					d1--;
+				}
+			}
+			unsigned int a3[128] = { 0 };
+			int d3 = 3, count3 = 0;
+			for (int i = 0; i < 128; i++)
+			{
+				a3[i] = 1 & (C.data[d3] >> count3);
+				count3++;
+				if (count3 == 32)
+				{
+					count3 = 0;
+					d3--;
+				}
+			}
+			a3[0] = temp;
+			//c?p nh?t l?i thành ph?n trong l?p C
+			int count = 0;
+			int d = 0;
+			for (int i = 127; i >= 0; i--)
+			{
+				C.data[d] = C.data[d] | (a3[i] << (32 - 1 - count));
+				count++;
+				if (count == 32)
+				{
+					count = 0;
+					d++;
+				}
+			}
+			D = C + B;
+			unsigned int a4[128] = { 0 };
+			//Ð?c các bit c?a data luu vào m?ng a4, bit d?u là bit a4[127]
+			int d4 = 3, count4 = 0;
+			for (int i = 0; i < 128; i++)
+			{
+				a4[i] = 1 & (D.data[d4] >> count4);
+				count4++;
+				if (count4 == 32)
+				{
+					count4 = 0;
+					d4--;
+				}
+			}
+			if (a4[127] == 0)
+			{
+				a1[0] = 1;
+				count = 0;
+				d = 0;
+				for (int i = 127; i >= 0; i--)
+				{
+					data[d] = data[d] | (a1[i] << (32 - 1 - count));
+					count++;
+					if (count == 32)
+					{
+						count = 0;
+						d++;
+					}
+				}
+				C = D;
+			}
+			else
+			{
+				a1[0] = 0;
+				count = 0;
+				d = 0;
+				for (int i = 127; i >= 0; i--)
+				{
+					data[d] = data[d] | (a1[i] << (32 - 1 - count));
+					count++;
+					if (count == 32)
+					{
+						count = 0;
+						d++;
+					}
+				}
+			}
+			count = 0;
+			d = 0;
+			for (int i = 127; i >= 0; i--)
+			{
+				data[d] = data[d] | (a1[i] << (32 - 1 - count));
+				count++;
+				if (count == 32)
+				{
+					count = 0;
+					d++;
+				}
+			}
+		}
+		d1 = 3, count1 = 0;
+		for (int i = 0; i < 128; i++)
+		{
+			a1[i] = 1 & (data[d1] >> count1);
+			count1++;
+			if (count1 == 32)
+			{
+				count1 = 0;
+				d1--;
+			}
+		}
+		// Ð?o bit thành d?ng bù 1
+		for (int i = 0; i < 127; i++)
+		{
+			if (a1[i] == 1)
+			{
+				a1[i] = 0;
+			}
+			else
+			{
+				a1[i] = 1;
+			}
+		}
+
+		//C?ng 1 vào k?t qu? thành d?ng bù 2
+		for (int i = 0; i < 127; i++)
+		{
+			if (a1[i] == 1)
+			{
+				a1[i] = 0;
+			}
+			else
+			{
+				a1[i] = 1;
+				break;
+			}
+		}
+		a1[127] = 1;
+		d1 = 0;
+		count1 = 0;
+		for (int i = 127; i >= 0; i--)
+		{
+			H.data[d1] = H.data[d1] | (a1[i] << (32 - 1 - count1));
+			count1++;
+			if (count1 == 32)
+			{
+				count1 = 0;
+				d1++;
+			}
+		}
+	}
+	return H;
+}
+
+//toan tu nhan
+QInt QInt::operator*(QInt B)
+{
+	unsigned int a1[128] = { 0 };
+	// Ð?c các bit c?a data luu vào m?ng a1, bit d?u là bit a1[127]
+	int d1 = 3, count1 = 0;
+	for (int i = 0; i < 128; i++)
+	{
+		a1[i] = 1 & (B.data[d1] >> count1);
+		count1++;
+		if (count1 == 32)
+		{
+			count1 = 0;
+			d1--;
+		}
+	}
+	unsigned int a2[128] = { 0 };//m?ng ph?
+	QInt A;
+	int Q1 = 0;
+	for (int i = 0; i < 128; i++)
+	{
+		if (Q1 == 0 && a1[0] == 1)
+			A = A - *this;
+		if (Q1 == 1 && a1[0] == 0)
+			A = A + *this;
+		// Ð?c các bit c?a data luu vào m?ng a1, bit d?u là bit a2[127]
+		int d2 = 3, count2 = 0;
+		for (int i = 0; i < 128; i++)
+		{
+			a2[i] = 1 & (A.data[d2] >> count2);
+			count2++;
+			if (count2 == 32)
+			{
+				count2 = 0;
+				d2--;
+			}
+		}
+		//luu bit Q1 b?ng bit d?u c?a a1
+		Q1 = a1[0];
+		//d?ch ph?i 1 bit c?a s? th? 2
+		B = B >> 1;
+		// Ð?c các bit c?a data luu vào m?ng a1, bit d?u là bit a1[127]
+		d1 = 3; count1 = 0;
+		for (int i = 0; i < 128; i++)
+		{
+			a1[i] = 1 & (B.data[d1] >> count1);
+			count1++;
+			if (count1 == 32)
+			{
+				count1 = 0;
+				d1--;
+			}
+		}
+		//luu bit cu?i c?a s? th? 2 b?ng bit d?u c?a m?ng ph?
+		a1[127] = a2[0];
+		//luu l?i du li?u vào s? th? 2
+		int count = 0;
+		int d = 0;
+		for (int i = 127; i >= 0; i--)
+		{
+			B.data[d] = B.data[d] | (a1[i] << (32 - 1 - count));
+			count++;
+			if (count == 32)
+			{
+				count = 0;
+				d++;
+			}
+		}
+		//d?ch ph?i s? ph?
+		A = A >> 1;
+		d2 = 3; count2 = 0;
+		for (int i = 0; i < 128; i++)
+		{
+			a2[i] = 1 & (A.data[d2] >> count2);
+			count2++;
+			if (count2 == 32)
+			{
+				count2 = 0;
+				d2--;
+			}
+		}
+		a2[127] = a2[126];
+		count = 0;
+		d = 0;
+		for (int i = 127; i >= 0; i--)
+		{
+			A.data[d] = A.data[d] | (a2[i] << (32 - 1 - count));
+			count++;
+			if (count == 32)
+			{
+				count = 0;
+				d++;
+			}
+		}
+	}
+	QInt res;// save [A,Q]
+	int dem = 0;
+	int resultSize = 0;
+	for (int i = 127; i >= 0; i--)
+	{
+		res.data[resultSize] = res.data[resultSize] | (a1[i] << (32 - 1 - dem));
+		dem++;
+		if (dem == 32)
+		{
+			dem = 0;
+			resultSize++;
+		}
+	}
+	return res;
 }
 
 
