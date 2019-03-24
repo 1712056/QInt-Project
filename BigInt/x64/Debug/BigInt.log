@@ -1,3 +1,16 @@
 ﻿  BigInt.cpp
-c:\users\asus\qint-project\bigint\bigint.cpp(54): warning C4101: 'c': unreferenced local variable
+  QInt.cpp
+c:\users\asus\qint-project\bigint\qint.cpp(7): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(10): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(50): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(229): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(230): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(478): warning C4806: '|': unsafe operation: no value of type 'bool' promoted to type 'int' can equal the given constant
+c:\users\asus\qint-project\bigint\qint.cpp(478): warning C4554: '|': check operator precedence for possible error; use parentheses to clarify precedence
+c:\users\asus\qint-project\bigint\qint.cpp(478): warning C4552: '|': result of expression not used
+c:\users\asus\qint-project\bigint\qint.cpp(508): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(530): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(541): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+c:\users\asus\qint-project\bigint\qint.cpp(607): warning C4244: '+=': conversion from 'double' to 'int', possible loss of data
+  Generating Code...
   BigInt.vcxproj -> C:\Users\ASUS\QInt-Project\x64\Debug\BigInt.exe

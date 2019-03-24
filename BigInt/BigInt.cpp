@@ -24,34 +24,24 @@ char *wchar_to_string(_TCHAR *widechar)
 	return charpointer;
 }
 
-/*
-int main()
-{
-	string s1 = "42535295865117307932921825928971026432";
-	string s2 = "10633823966279326983230456482242756615";
-	QInt a,b;
-	a = s1;
-	b = s2;
-	QInt c = a / b;
-	c.Xuat();
-}
-*/
 
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	char* inputFile = wchar_to_string(argv[1]); //Tên file  input
 	char* outputFile = wchar_to_string(argv[2]); //Tên file output
-	string type = wchar_to_string(argv[3]); //Loại tập tin, 1: Số QInt, 2:Float
-	freopen(inputFile, "r+", stdin);
+	string type = wchar_to_string(argv[3]); //Loại tập tin, 1: Số QInt, 2:QFloat
+	
+	freopen(inputFile, "r+", stdin); //Mở file để đọc dữ liệu 
+	
 	string s1;
 	string s2;
 	string s3;
 	string s4;
 	vector <string> result; //Mảng lưu trữ các giá trị kết quả
+	
 	if (type == "1") //File QInt
 	{
-		char c;
 		while (cin>>s1) //Đọc giá trị thứ nhất, đây cũng là điều kiện kiểm tra kết thúc file
 		{
 			cin >> s2; //Đọc giá trị thứ 2
@@ -112,7 +102,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 			else if(s2!="~")
 			{
-				cin >> s3; //operator
+				cin >> s3; //Biến lưu toán tử
 				cin >> s4; 
 				
 				if (s1 == "2") //Xử lý ở chế độ Bin
@@ -123,32 +113,64 @@ int _tmain(int argc, _TCHAR* argv[])
 
 					if (s3 == "+")
 					{
+						QInt c;
 						b.binToDec(s4);
-						QInt c = a + b;
-						string temp = c.decToBin();
-						result.push_back(temp);
+						try
+						{
+							c = a + b;
+							string temp = c.decToBin();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 
 					else if (s3 == "-")
 					{
+						QInt c;
 						b.binToDec(s4);
-						QInt c = a - b;
-						string temp = c.decToBin();
-						result.push_back(temp);
+						try
+						{
+							c = a - b;
+							string temp = c.decToBin();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 					else if (s3 == "/")
 					{
+						QInt c;
 						b.binToDec(s4);
-						QInt c = a / b;
-						string temp = c.decToBin();
-						result.push_back(temp);
+						try
+						{
+							c = a / b;
+							string temp = c.decToBin();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 					else if (s3 == "*")
 					{
+						QInt c;
 						b.binToDec(s4);
-						QInt c = a * b;
-						string temp = c.decToBin();
-						result.push_back(temp);
+						try
+						{
+							c = a * b;
+							string temp = c.decToBin();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 
 					else if (s3 == "<")
@@ -261,31 +283,63 @@ int _tmain(int argc, _TCHAR* argv[])
 					if (s3 == "+")
 					{
 						b = s4;
-						QInt c = a + b;
-						string temp = c.decToStr();
-						result.push_back(temp);
+						QInt c;
+						try
+						{
+							c = a + b;
+							string temp = c.decToStr();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 
 					else if (s3 == "-")
 					{
 						b = s4;
-						QInt c = a - b;
-						string temp = c.decToStr();
-						result.push_back(temp);
+						QInt c;
+						try
+						{
+							c = a - b;
+							string temp = c.decToStr();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 					else if (s3 == "/")
 					{
 						b = s4;
-						QInt c = a / b;
-						string temp = c.decToStr();
-						result.push_back(temp);
+						QInt c;
+						try
+						{
+							c = a / b;
+							string temp = c.decToStr();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 					else if (s3 == "*")
 					{
 						b = s4;
-						QInt c = a * b;
-						string temp = c.decToStr();
-						result.push_back(temp);
+						QInt c;
+						try
+						{
+							c = a * b;
+							string temp = c.decToStr();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
 					}
 
 					else if (s3 == "<")
@@ -398,31 +452,64 @@ int _tmain(int argc, _TCHAR* argv[])
 				if (s3 == "+")
 				{
 					b.hexToDec(s4);
-					QInt c = a + b;
-					string temp = c.decToHex();
-					result.push_back(temp);
+					QInt c;
+					try
+					{
+						c = a + b;
+						string temp = c.decToHex();
+						result.push_back(temp);
+					}
+					catch (const char* msg)
+					{
+						result.push_back(msg);
+					}
+					
 				}
 
 				else if (s3 == "-")
 				{
 					b.hexToDec(s4);
-					QInt c = a - b;
-					string temp = c.decToHex();
-					result.push_back(temp);
+					QInt c;
+					try
+					{
+						c = a - b;
+						string temp = c.decToHex();
+						result.push_back(temp);
+					}
+					catch (const char* msg)
+					{
+						result.push_back(msg);
+					}
 				}
 				else if (s3 == "/")
 				{
 					b.hexToDec(s4);
-					QInt c = a / b;
-					string temp = c.decToHex();
-					result.push_back(temp);
+					QInt c;
+					try
+					{
+						c = a / b;
+						string temp = c.decToHex();
+						result.push_back(temp);
+					}
+					catch (const char* msg)
+					{
+						result.push_back(msg);
+					}
 				}
 				else if (s3 == "*")
 				{
 					b.hexToDec(s4);
-					QInt c = a * b;
-					string temp = c.decToHex();
-					result.push_back(temp);
+					QInt c;
+					try
+					{
+						c = a * b;
+						string temp = c.decToHex();
+						result.push_back(temp);
+					}
+					catch (const char* msg)
+					{
+						result.push_back(msg);
+					}
 				}
 
 				else if (s3 == "<")
@@ -528,7 +615,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 
 			}
-			else if (s2 == "~")
+			else if (s2 == "~") //Toán tử 1 ngôi ~
 			{
 				cin >> s3;
 				if (s1 == "10")
@@ -559,12 +646,11 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 		}
 	}
-	cout << result.size() << endl;
-	freopen(outputFile, "w+", stdout);
+	cout << "DONE !";
+	freopen(outputFile, "w+", stdout); //Ghi ra file
 	for (int i = 0; i < result.size(); i++)
 	{
 		cout << result[i]<<endl;
 	}
 
-	
 }

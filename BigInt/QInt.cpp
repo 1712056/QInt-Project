@@ -132,7 +132,7 @@ void QInt::Nhap()
 
 			//Chia chuỗi s cho 2
 			s = chia2(s);
-			if (i > 126)
+			if (i > 128)
 			{
 				throw "Stack Overflow";
 			}
@@ -166,7 +166,7 @@ void QInt::Nhap()
 
 			//Chia chuỗi s cho 2
 			positive_s = chia2(positive_s);
-			if (i > 126)
+			if (i > 128)
 			{
 				throw "Stack Overflow";
 			}
@@ -317,7 +317,7 @@ void QInt::Xuat()
 	else //Bit dấu = 1
 	{
 		// Trừ 1 để thành dạng bù 1
-		for (int i = 0; i < 127; i++)
+		for (int i = 0; i < 128; i++)
 		{
 			if (a[i] == 0)
 			{
@@ -330,7 +330,7 @@ void QInt::Xuat()
 			}
 		}
 		// Đảo bit
-		for (int i = 0; i < 127; i++)
+		for (int i = 0; i < 128; i++)
 		{
 			if (a[i] == 1)
 				a[i] = 0;
@@ -338,7 +338,7 @@ void QInt::Xuat()
 				a[i] = 1;
 		}
 
-		for (int i = 0; i < 127; i++)
+		for (int i = 0; i < 128; i++) //Tính giá trị như dạng không dấu
 		{
 			if (a[i] == 1)
 			{
@@ -349,6 +349,10 @@ void QInt::Xuat()
 		reverse(result.begin(), result.end()); //Đảo chuỗi
 		result += "-"; //Thêm dấu âm vào cuối chuỗi
 		reverse(result.begin(), result.end()); //Đảo chuỗi cho đúng kết quả
+		if (result == "-0")
+		{
+
+		}
 	}
 	cout << result << endl;
 }
@@ -2313,7 +2317,7 @@ QInt& QInt::operator=(string s)
 
 			//Chia chuỗi s cho 2
 			s = chia2(s);
-			if (i > 127)
+			if (i > 128)
 			{
 				throw "Stack Overflow";
 			}
@@ -2344,7 +2348,7 @@ QInt& QInt::operator=(string s)
 				a[i] = 1;
 				i++;
 			}
-			if (i > 128) // ????:D????
+			if (i > 128) // ???? :D ????
 			{
 				throw "Stack Overflow";
 			}
@@ -2434,7 +2438,7 @@ string QInt::decToStr()
 	else //Bit dấu = 1
 	{
 		// Trừ 1 để thành dạng bù 1
-		for (int i = 0; i < 127; i++)
+		for (int i = 0; i < 128; i++)
 		{
 			if (a[i] == 0)
 			{
@@ -2447,7 +2451,7 @@ string QInt::decToStr()
 			}
 		}
 		// Đảo bit
-		for (int i = 0; i < 127; i++)
+		for (int i = 0; i < 128; i++)
 		{
 			if (a[i] == 1)
 				a[i] = 0;
@@ -2455,7 +2459,7 @@ string QInt::decToStr()
 				a[i] = 1;
 		}
 
-		for (int i = 0; i < 127; i++)
+		for (int i = 0; i < 128; i++)
 		{
 			if (a[i] == 1)
 			{
@@ -3106,6 +3110,28 @@ QInt QInt::operator*(QInt B)
 		{
 			dem = 0;
 			resultSize++;
+		}
+	}
+	if (a2[0] == 0)
+	{
+		for (int i = 0; i < 128; i++)
+		{
+			if (a2[i] != 0)
+			{
+				throw "Stack Overflow";
+				break;
+			}
+		}
+	}
+	else
+	{
+		for (int i = 0; i < 128; i++)
+		{
+			if (a2[i] != 1)
+			{
+				throw "Stack Overflow";
+				break;
+			}
 		}
 	}
 	return res;
