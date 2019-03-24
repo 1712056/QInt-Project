@@ -132,7 +132,7 @@ void QInt::Nhap()
 
 			//Chia chuỗi s cho 2
 			s = chia2(s);
-			if (i > 128)
+			if (i > 127)
 			{
 				throw "Stack Overflow";
 			}
@@ -2317,7 +2317,7 @@ QInt& QInt::operator=(string s)
 
 			//Chia chuỗi s cho 2
 			s = chia2(s);
-			if (i > 128)
+			if (i > 127)
 			{
 				throw "Stack Overflow";
 			}
@@ -2544,6 +2544,10 @@ QInt QInt::hexToDec(string s)
 //toan tu chia
 QInt QInt::operator/(QInt B)
 {
+	if (B.decToStr() == "0")
+	{
+		throw "Divide by 0";
+	}
 	QInt H;
 	unsigned int a1[128] = { 0 };
 	// Ð?c các bit c?a data luu vào m?ng a1, bit d?u là bit a1[127]
@@ -3136,7 +3140,6 @@ QInt QInt::operator*(QInt B)
 	}
 	return res;
 }
-
 
 QInt::~QInt()
 {

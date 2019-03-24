@@ -25,7 +25,6 @@ char *wchar_to_string(_TCHAR *widechar)
 }
 
 
-
 int _tmain(int argc, _TCHAR* argv[])
 {
 	char* inputFile = wchar_to_string(argv[1]); //Tên file  input
