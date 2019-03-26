@@ -5,6 +5,7 @@
 #include <iostream>
 #include <string>
 #include "QInt.h"
+#include "QFloat.h"
 #include <vector>
 
 using namespace std;
@@ -25,6 +26,7 @@ char *wchar_to_string(_TCHAR *widechar)
 }
 
 
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	char* inputFile = wchar_to_string(argv[1]); //Tên file  input
@@ -41,14 +43,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	if (type == "1") //File QInt
 	{
-		while (cin>>s1) //Đọc giá trị thứ nhất, đây cũng là điều kiện kiểm tra kết thúc file
+		while (cin >> s1) //Đọc giá trị thứ nhất, đây cũng là điều kiện kiểm tra kết thúc file
 		{
 			cin >> s2; //Đọc giá trị thứ 2
 			//Trường hợp 2 tham số đầu đều là p, nghĩa là chuyển đổi cơ số
-			if (s2 == "2" || s2 == "10" || s2 == "16") 
+			if (s2 == "2" || s2 == "10" || s2 == "16")
 			{
 				cin >> s3; //Đọc giá trị còn lại trên dòng
-				
+
 				if (s1 == "10") //Số cần chuyển ở hệ 10
 				{
 					QInt a;
@@ -63,9 +65,9 @@ int _tmain(int argc, _TCHAR* argv[])
 						string temp = a.decToHex();
 						result.push_back(temp);
 					}
-					
+
 				}
-				
+
 				else if (s1 == "2") //Số cần chuyển ở hệ 2
 				{
 					if (s2 == "10") // Chuyển hệ 2 sang hệ 10
@@ -99,11 +101,11 @@ int _tmain(int argc, _TCHAR* argv[])
 					}
 				}
 			}
-			else if(s2!="~")
+			else if (s2 != "~")
 			{
 				cin >> s3; //Biến lưu toán tử
-				cin >> s4; 
-				
+				cin >> s4;
+
 				if (s1 == "2") //Xử lý ở chế độ Bin
 				{
 					QInt a;
@@ -266,11 +268,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
 					else if (s3 == ">>")
 					{
-					int n = strToNum(s4);
-					QInt c;
-					c = a >> n;
-					string temp = c.decToBin();
-					result.push_back(temp);
+						int n = strToNum(s4);
+						QInt c;
+						c = a >> n;
+						string temp = c.decToBin();
+						result.push_back(temp);
 					}
 				}
 				else if (s1 == "10") //Xử lý ở chế độ Dec
@@ -444,173 +446,173 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 				else if (s1 == "16") //Xử lý ở chế độ 16
 				{
-				QInt a;
-				QInt b;
-				a.hexToDec(s2);
+					QInt a;
+					QInt b;
+					a.hexToDec(s2);
 
-				if (s3 == "+")
-				{
-					b.hexToDec(s4);
-					QInt c;
-					try
+					if (s3 == "+")
 					{
-						c = a + b;
+						b.hexToDec(s4);
+						QInt c;
+						try
+						{
+							c = a + b;
+							string temp = c.decToHex();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
+
+					}
+
+					else if (s3 == "-")
+					{
+						b.hexToDec(s4);
+						QInt c;
+						try
+						{
+							c = a - b;
+							string temp = c.decToHex();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
+					}
+					else if (s3 == "/")
+					{
+						b.hexToDec(s4);
+						QInt c;
+						try
+						{
+							c = a / b;
+							string temp = c.decToHex();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
+					}
+					else if (s3 == "*")
+					{
+						b.hexToDec(s4);
+						QInt c;
+						try
+						{
+							c = a * b;
+							string temp = c.decToHex();
+							result.push_back(temp);
+						}
+						catch (const char* msg)
+						{
+							result.push_back(msg);
+						}
+					}
+
+					else if (s3 == "<")
+					{
+						b.hexToDec(s4);
+						string temp;
+						if (a < b)
+							temp = "True";
+						else
+							temp = "False";
+						result.push_back(temp);
+					}
+
+					else if (s3 == ">")
+					{
+						b.hexToDec(s4);
+						string temp;
+						if (a > b)
+							temp = "True";
+						else
+							temp = "False";
+						result.push_back(temp);
+					}
+
+					else if (s3 == "==")
+					{
+						b.hexToDec(s4);
+						string temp;
+						if (a == b)
+							temp = "True";
+						else
+							temp = "False";
+						result.push_back(temp);
+					}
+
+					else if (s3 == "<=")
+					{
+						b.hexToDec(s4);
+						string temp;
+						if (a <= b)
+							temp = "True";
+						else
+							temp = "False";
+						result.push_back(temp);
+					}
+
+					else if (s3 == ">=")
+					{
+						b.hexToDec(s4);
+						string temp;
+						if (a >= b)
+							temp = "True";
+						else
+							temp = "False";
+						result.push_back(temp);
+					}
+
+					else if (s3 == "&")
+					{
+						b.hexToDec(s4);
+						QInt c;
+						c = a & b;
 						string temp = c.decToHex();
 						result.push_back(temp);
 					}
-					catch (const char* msg)
-					{
-						result.push_back(msg);
-					}
-					
-				}
 
-				else if (s3 == "-")
-				{
-					b.hexToDec(s4);
-					QInt c;
-					try
+					else if (s3 == "|")
 					{
-						c = a - b;
+						b.hexToDec(s4);
+						QInt c;
+						c = a | b;
 						string temp = c.decToHex();
 						result.push_back(temp);
 					}
-					catch (const char* msg)
+
+					else if (s3 == "^")
 					{
-						result.push_back(msg);
-					}
-				}
-				else if (s3 == "/")
-				{
-					b.hexToDec(s4);
-					QInt c;
-					try
-					{
-						c = a / b;
+						b.hexToDec(s4);
+						QInt c;
+						c = a ^ b;
 						string temp = c.decToHex();
 						result.push_back(temp);
 					}
-					catch (const char* msg)
+
+					else if (s3 == "<<")
 					{
-						result.push_back(msg);
+						int n = strToNum(s4);
+						QInt c;
+						c = a << n;
+						string temp = c.decToHex();
+						result.push_back(temp);
+
 					}
-				}
-				else if (s3 == "*")
-				{
-					b.hexToDec(s4);
-					QInt c;
-					try
+
+					else if (s3 == ">>")
 					{
-						c = a * b;
+						int n = strToNum(s4);
+						QInt c;
+						c = a >> n;
 						string temp = c.decToHex();
 						result.push_back(temp);
 					}
-					catch (const char* msg)
-					{
-						result.push_back(msg);
-					}
-				}
-
-				else if (s3 == "<")
-				{
-					b.hexToDec(s4);
-					string temp;
-					if (a < b)
-						temp = "True";
-					else
-						temp = "False";
-					result.push_back(temp);
-				}
-
-				else if (s3 == ">")
-				{
-					b.hexToDec(s4);
-					string temp;
-					if (a > b)
-						temp = "True";
-					else
-						temp = "False";
-					result.push_back(temp);
-				}
-
-				else if (s3 == "==")
-				{
-					b.hexToDec(s4);
-					string temp;
-					if (a == b)
-						temp = "True";
-					else
-						temp = "False";
-					result.push_back(temp);
-				}
-
-				else if (s3 == "<=")
-				{
-					b.hexToDec(s4);
-					string temp;
-					if (a <= b)
-						temp = "True";
-					else
-						temp = "False";
-					result.push_back(temp);
-				}
-
-				else if (s3 == ">=")
-				{
-					b.hexToDec(s4);
-					string temp;
-					if (a >= b)
-						temp = "True";
-					else
-						temp = "False";
-					result.push_back(temp);
-				}
-
-				else if (s3 == "&")
-				{
-					b.hexToDec(s4);
-					QInt c;
-					c = a & b;
-					string temp = c.decToHex();
-					result.push_back(temp);
-				}
-
-				else if (s3 == "|")
-				{
-					b.hexToDec(s4);
-					QInt c;
-					c = a | b;
-					string temp = c.decToHex();
-					result.push_back(temp);
-				}
-
-				else if (s3 == "^")
-				{
-					b.hexToDec(s4);
-					QInt c;
-					c = a ^ b;
-					string temp = c.decToHex();
-					result.push_back(temp);
-				}
-
-				else if (s3 == "<<")
-				{
-					int n = strToNum(s4);
-					QInt c;
-					c = a << n;
-					string temp = c.decToHex();
-					result.push_back(temp);
-
-				}
-
-				else if (s3 == ">>")
-				{
-					int n = strToNum(s4);
-					QInt c;
-					c = a >> n;
-					string temp = c.decToHex();
-					result.push_back(temp);
-				}
 				}
 
 			}
@@ -645,11 +647,39 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 		}
 	}
+	else if (type == "2") //File QFloat
+	{
+		while (cin >> s1) 
+		{
+			cin >> s2;
+			cin >> s3;
+			if (s1 == "10")
+			{
+				if (s2 == "2") //CHuyen 10 sang 2
+				{
+					QFloat a;
+					a = s3;
+					string temp = a.decToBin(a);
+					result.push_back(temp);
+				}
+			}
+			else if (s1 == "2")
+			{
+				if (s2 == "10")
+				{
+					QFloat a;
+					a.binToDec(s3);
+					string temp = a.decToStr();
+					result.push_back(temp);
+				}
+			}
+		}
+	}
+
 	cout << "DONE !";
 	freopen(outputFile, "w+", stdout); //Ghi ra file
 	for (int i = 0; i < result.size(); i++)
 	{
-		cout << result[i]<<endl;
+		cout << result[i] << endl;
 	}
-
 }
